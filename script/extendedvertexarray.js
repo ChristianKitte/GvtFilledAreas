@@ -1,49 +1,35 @@
 /**
- * Array, das die aktuellen Vertices hält
+ * Array, das die unterschiedlichen Vertices für die Ausgabe hält
  * @type {Float32Array} Ein neues Float32 Array
  */
-var TriangleVertices = new Float32Array([]);
+var vertices = new Float32Array([]);
+
+/**
+ * Array, das die aktuellen VerticesIndizes für die Ausgabe hält
+ * @type {Uint16Array}
+ */
+var verticesIndex = new Uint16Array([]);
 
 /**
  * Hilfsfunktion, um im Array vertices dynamisch einen neuen Wert
  * hinzuzufügen
  *
  * https://stackoverflow.com/questions/24410418/push-on-float32array
+ * https://javascript.plainenglish.io/advanced-array-methods-in-javascript-d33e4b12de25
+ *
  */
-function pushTriangle() {
-    TriangleVertices = new Float32Array([...TriangleVertices, ...arguments]);
+function pushVertices() {
+    vertices = new Float32Array([...vertices, ...arguments]);
 }
 
 /**
- * Array, das die aktuellen Vertices für die Linie hält
- * @type {Float32Array} Ein neues Float32 Array
- */
-var LineVertices = new Float32Array([]);
-
-/**
- * Hilfsfunktion, um im Array LineVertices dynamisch einen neuen Wert
+ * Hilfsfunktion, um im Array verticesIndex dynamisch einen neuen Wert
  * hinzuzufügen
  *
- * https://stackoverflow.com/questions/24410418/push-on-float32array
  */
-function pushLine() {
-    LineVertices = new Float32Array([...LineVertices, ...arguments]);
+function pushIndex() {
+    verticesIndex = new Uint16Array([...verticesIndex, ...arguments]);
 }
 
-/**
- * Array, das die aktuellen Vertices für die SinusLinie hält
- * @type {Float32Array} Ein neues Float32 Array
- */
-var WaveVertices = new Float32Array([]);
-
-/**
- * Hilfsfunktion, um im Array WaveVertices dynamisch einen neuen Wert
- * hinzuzufügen
- *
- * https://stackoverflow.com/questions/24410418/push-on-float32array
- */
-function pushWave() {
-    WaveVertices = new Float32Array([...WaveVertices, ...arguments]);
-}
 
 

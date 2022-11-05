@@ -60,5 +60,5 @@ function iniWebGLApp() {
     gl.useProgram(program);
 
     // start drawing
-    RefreshWave();
+    RefreshWaves();
 }

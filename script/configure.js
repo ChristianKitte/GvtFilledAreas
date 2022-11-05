@@ -65,7 +65,7 @@ function setInfoText() {
 document.getElementById("figure1").onclick = () => {
     activeModel = 1;
     setInfoText();
-    RefreshWave();
+    RefreshWaves();
 }
 
 /**
@@ -74,7 +74,7 @@ document.getElementById("figure1").onclick = () => {
 document.getElementById("figure2").onclick = () => {
     activeModel = 2;
     setInfoText();
-    RefreshWave();
+    RefreshWaves();
 }
 
 /**
@@ -83,7 +83,7 @@ document.getElementById("figure2").onclick = () => {
 document.getElementById("figure3").onclick = () => {
     activeModel = 3;
     setInfoText();
-    RefreshWave();
+    RefreshWaves();
 }
 
 

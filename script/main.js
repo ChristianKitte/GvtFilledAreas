@@ -11,182 +11,40 @@ function sinusFromDegree(degree, y_scale) {
     return y_pos;
 }
 
-/**
- * Hilfsfunktion zum Anlegen des Vertex Array für die Null Linie
- */
-function fillLineArray() {
-    /**
-     * JavaScript Array für die Vertices der Null-Linie
-     * @type {Float32Array}
-     */
-    LineVertices = new Float32Array([]);
+function cosinusFromDegree(degree, y_scale) {
+    let radians = degree * Math.PI / 180.0;
+    let y_pos = Math.cos(radians) * y_scale;
 
-    pushLine(-8);
-    pushLine(0);
-    pushLine(0, 0, 0, 1);
-
-    pushLine(368);
-    pushLine(0);
-    pushLine(0, 0, 0, 1);
+    return y_pos;
 }
 
 /**
  * Baut die Vertices Array für die Linie und Dreiecke auf Basis der Vorgabewerte
  */
 function getVerticesPointsArray() {
-    /**
-     * JavaScript Array für die Vertices der Dreiecke
-     * @type {Float32Array}
-     */
-    TriangleVertices = new Float32Array([]);
-    /**
-     * JavaScript Array für die Vertices der Sinuskurve
-     * @type {Float32Array}
-     */
-    WaveVertices = new Float32Array([]);
+    let indexCounter = 0;
 
-    /**
-     * Die X Position für den Wert i
-     * @type {number}
-     */
-    var x_pos = 0;
-    /**
-     * Die Y Position für den Werte i
-     * @type {number}
-     */
-    var y_pos = 0;
-    /**
-     * Die Y Position für den Werte i + distance
-     * @type {number}
-     */
-    var next_y_pos = 0;
-    /**
-     * True, wenn das Dreieck nach rechts gezeichnet wird
-     * @type {boolean}
-     */
-    var bridgeToRight = true
-
-    /**
-     * Setzt den Infotext auf Basis der aktuellen Werte
-     */
-    setInfoText();
-    /**
-     * Füllt das JavaSycript Array mit den Vertices für die Null Linie
-     */
-    fillLineArray();
-
-    /**
-     * Füllt alle benötigten Array mit den Positionen und Farbwerten der Vertices.
-     */
-    for (let Winkelgrad = 0; Winkelgrad < 361;) {
-        /**
-         * Winkelgrad + Startwert (Offset)
-         * @type {number} Winkelgrad zum Rechnen
-         */
-        let realWinkelgrad = Winkelgrad + Winkelgrad_startValue;
-
-        y_pos = sinusFromDegree(realWinkelgrad, y_scale);
-        next_y_pos = sinusFromDegree(realWinkelgrad + resolution, y_scale);
-
-        /**
-         * Punkte und Farbe der nächsten Punkte der Sinuswelle ausgeben
-         */
-        pushWave(Winkelgrad);
-        pushWave(y_pos);
-        pushWave(1.0, 0.0, 0.0, 1);
-        pushWave(Winkelgrad + resolution);
-        pushWave(next_y_pos);
-        pushWave(1.0, 0.0, 0.0, 1);
-
-        /**
-         * Bestimmen, ob das nächste Dreieck nach rechts oder links gezeichnet werden muss.
-         */
-        if ((next_y_pos >= y_pos) && y_pos >= 0 || (next_y_pos <= y_pos) && y_pos <= 0) {
-            bridgeToRight = true;
+    for (let x = 0; x <= 360; x += 15) {
+        // X Koordinate
+        //if (x === 0) {
+        pushVertices(sinusFromDegree(x, 100));
+        pushIndex(indexCounter);
+        indexCounter++;/*
         } else {
-            bridgeToRight = false;
-        }
+            pushVertices(vertices[0]);
+            pushIndex(0);
+            //indexCounter++;
+        }*/
 
-        if (bridgeToRight) {
-            //******************************
-            // Erstes Dreieck
-            //******************************
+        // Y Koordinate
+        pushVertices(cosinusFromDegree(x, 100));
+        pushIndex(indexCounter);
+        indexCounter++;
 
-            // Punkt 1 des Dreiecks
-            pushTriangle(x_pos);
-            pushTriangle(0);
-            pushTriangle(0, 1, 0, 1);
-
-            // Punkt 2 des Dreiecks wenn Bridge right
-            pushTriangle(x_pos + resolution);
-            pushTriangle(y_pos);
-            pushTriangle(0, 1, 0, 1);
-
-            // Punkt 3 des Dreiecks wenn Bridge right
-            pushTriangle(x_pos);
-            pushTriangle(y_pos);
-            pushTriangle(0, 1, 0, 1);
-
-            //******************************
-            // Zweites Dreieck
-            //******************************
-
-            // Punkt 1 des Dreiecks
-            pushTriangle(x_pos);
-            pushTriangle(0);
-            pushTriangle(0, 0, 1, 1);
-
-            // Punkt 2 des Dreiecks wenn Bridge left
-            pushTriangle(x_pos + resolution);
-            pushTriangle(0);
-            pushTriangle(0, 0, 1, 1);
-
-            // Punkt 3 des Dreiecks wenn Bridge right
-            pushTriangle(x_pos + resolution);
-            pushTriangle(y_pos);
-            pushTriangle(0, 0, 1, 1);
-        } else {
-            //******************************
-            // Erstes Dreieck
-            //******************************
-
-            // Punkt 1 des Dreiecks
-            pushTriangle(x_pos);
-            pushTriangle(0);
-            pushTriangle(0, 0, 1, 1);
-
-            // Punkt 2 des Dreiecks wenn Bridge left
-            pushTriangle(x_pos + resolution);
-            pushTriangle(0);
-            pushTriangle(0, 0, 1, 1);
-
-            // Punkt 3 des Dreiecks, wenn Bridge left
-            pushTriangle(x_pos);
-            pushTriangle(next_y_pos);
-            pushTriangle(0, 0, 1, 1);
-
-            //******************************
-            // Zweites Dreieck
-            //******************************
-
-            // Punkt 1 des Dreiecks
-            pushTriangle(x_pos + resolution);
-            pushTriangle(0);
-            pushTriangle(0, 1, 0, 1);
-
-            // Punkt 2 des Dreiecks wenn Bridge left
-            pushTriangle(x_pos + resolution);
-            pushTriangle(next_y_pos);
-            pushTriangle(0, 1, 0, 1);
-
-            // Punkt 3 des Dreiecks, wenn Bridge left
-            pushTriangle(x_pos);
-            pushTriangle(next_y_pos);
-            pushTriangle(0, 1, 0, 1);
-        }
-
-        x_pos = x_pos + resolution;
-        Winkelgrad = Winkelgrad + resolution;
+        // Farbwert
+        pushVertices(1.0, 0.0, 0.0, 1);
+        pushIndex(indexCounter, indexCounter + 1, indexCounter + 2, indexCounter + 3);
+        indexCounter += 4;
     }
 }
 
@@ -216,19 +74,15 @@ function RefreshWaves() {
     // alte Ausgabe löschen
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Ausgabe Dreiecke...
-    gl.bufferData(gl.ARRAY_BUFFER, TriangleVertices, gl.STATIC_DRAW);
-    gl.drawArrays(gl.TRIANGLES, 0, TriangleVertices.length / 6);
+    var ibo = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, verticesIndex, gl.STATIC_DRAW);
+    ibo.numerOfEmements = vertices.length / 6;
 
-    // Ausgabe Nullinie...
-    gl.bufferData(gl.ARRAY_BUFFER, LineVertices, gl.STATIC_DRAW);
-    gl.drawArrays(gl.LINES, 0, LineVertices.length / 6);
-
-    // optional Ausgabe Sinuskurve...
-    if (showSinusLine) {
-        gl.bufferData(gl.ARRAY_BUFFER, WaveVertices, gl.STATIC_DRAW);
-        gl.drawArrays(gl.LINES, 0, WaveVertices.length / 6);
-    }
+    // Ausgabe
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+    //gl.drawArrays(gl.LINES, 0, vertices.length / 6);
+    gl.drawElements(gl.LINES, ibo.numerOfEmements, gl.UNSIGNED_SHORT, 0);
 }
 
 /**
