@@ -25,92 +25,90 @@ function cosinusFromDegree(degree, y_scale) {
 }
 
 /**
+ * Baut die Vertices Array für die Figur 1 (Möbiusband)
+ */
+function getFigure1VerticesPointsArray() {
+    vertices = new Float32Array([]);
+    verticesIndex = new Uint16Array([]);
+    let indexCounter = 0;
+
+    let a = 100.0;
+    let b = 200.0
+    let c = 150.0
+
+    let n = 10.0;
+    let du = a / n;
+
+    let m = 10.0;
+    let dv = Math.pi * 2.0 / m;
+
+    for (let v = 0, i = 0; i < m; v += dv, i++) {
+        for (let u = 0, j = 0; j < n; u += du, j++) {
+
+            x = c * Math.sqrt(u * (u - a) * (u - b)) * Math.sin(v) * 50;
+            y = u * 50;
+            z = c * Math.sqrt(u * (u - a) * (u - b)) * Math.cos(v) * 50;
+
+            pushVertices(x, y, z, 1.0, 0.0, 0.0, 1);
+            pushIndex(indexCounter++);
+            pushIndex(indexCounter++);
+            pushIndex(indexCounter++);
+            pushIndex(indexCounter++);
+            pushIndex(indexCounter++);
+            pushIndex(indexCounter++);
+            pushIndex(indexCounter++);
+        }
+    }
+
+
+}
+
+/**
+ * Baut die Vertices Array für die Figur 2
+ */
+function getFigure2VerticesPointsArray() {
+
+}
+
+/**
  * Baut die Vertices Array für die Linie und Dreiecke auf Basis der Vorgabewerte
  */
 function getFigure3VerticesPointsArray() {
     vertices = new Float32Array([]);
     verticesIndex = new Uint16Array([]);
-    let indexCounter = 0;
 
-    let dt = 360 / 15;
-    let dr = 100 / 2;
+    let stepT = 16
+    let dg = 360 / stepT;
 
-    for (let t = 0; t <= 360; t += dt) {
+    let stepR = 3;
+    let dr = 250 / stepR;
 
-        for (let radius = 0.0; radius <= 100.0; radius += dr) {
+    for (let grad = 0.0, i = 0; i <= stepT; grad += dg, i++) {
+        for (let radius = 0.0, j = 0; j <= stepR; radius += dr, j++) {
+            var iVertex = i * (stepR + 1) + j; // ==> Anzahl der Knoten
+
             // Punkte definieren
-            pushVertices(sinusFromDegree(t, radius)); // X Koordinate
-            indexCounter++;
-            pushVertices(cosinusFromDegree(t, radius)); // Y Koordinate
-            indexCounter++;
+            pushVertices(sinusFromDegree(grad, radius)); // X Koordinate
+            pushVertices(cosinusFromDegree(grad, radius)); // Y Koordinate
             pushVertices(0); // Z Koordinate
-            indexCounter++;
             pushVertices(1.0, 0.0, 0.0, 1); // Farbwert
-            indexCounter += 4;
 
             // Ausgabe definieren
-            if (t > 0 && radius > 0) {
-
-
-                pushIndex(indexCounter - 14);
-                pushIndex(indexCounter - 13);
-                pushIndex(indexCounter - 12);
-                pushIndex(indexCounter - 11, indexCounter - 10, indexCounter - 9, indexCounter - 8);
-
-                pushIndex(indexCounter - 7);
-                pushIndex(indexCounter - 6);
-                pushIndex(indexCounter - 5);
-                pushIndex(indexCounter - 4, indexCounter - 3, indexCounter - 2, indexCounter - 1);
-
-                pushIndex(indexCounter - 35);
-                pushIndex(indexCounter - 34);
-                pushIndex(indexCounter - 33);
-                pushIndex(indexCounter - 32, indexCounter - 31, indexCounter - 30, indexCounter - 29);
-
-                pushIndex(indexCounter - 28);
-                pushIndex(indexCounter - 27);
-                pushIndex(indexCounter - 26);
-                pushIndex(indexCounter - 25, indexCounter - 24, indexCounter - 23, indexCounter - 22);
-
-
+            if (i > 0 && j >= 0) {
+                pushIndex(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
+                pushIndex(iVertex);
             }
-
-            /*
-                        if (x === 0) {
-                            if (radius > 0) {
-                                pushIndex(indexCounter - 14);
-                                pushIndex(indexCounter - 13);
-                                pushIndex(indexCounter - 12);
-                                pushIndex(indexCounter - 11, indexCounter - 10, indexCounter - 9, indexCounter - 8);
-
-                                pushIndex(indexCounter - 7);
-                                pushIndex(indexCounter - 6);
-                                pushIndex(indexCounter - 5);
-                                pushIndex(indexCounter - 4, indexCounter - 3, indexCounter - 2, indexCounter - 1);
-                            } else if (radius === 0) {
-                                pushIndex(indexCounter - 7);
-                                pushIndex(indexCounter - 6);
-                                pushIndex(indexCounter - 5);
-                                pushIndex(indexCounter - 4, indexCounter - 3, indexCounter - 2, indexCounter - 1);
-                            }
-                        } else if (x > 0) {
-                            if (radius > 0) {
-                                pushIndex(indexCounter - 14);
-                                pushIndex(indexCounter - 13);
-                                pushIndex(indexCounter - 12);
-                                pushIndex(indexCounter - 11, indexCounter - 10, indexCounter - 9, indexCounter - 8);
-
-                                pushIndex(indexCounter - 7);
-                                pushIndex(indexCounter - 6);
-                                pushIndex(indexCounter - 5);
-                                pushIndex(indexCounter - 4, indexCounter - 3, indexCounter - 2, indexCounter - 1);
-                            } else if (radius === 0) {
-                                pushIndex(indexCounter - 7);
-                                pushIndex(indexCounter - 6);
-                                pushIndex(indexCounter - 5);
-                                pushIndex(indexCounter - 4, indexCounter - 3, indexCounter - 2, indexCounter - 1);
-                            }
-                        }*/
+            if (i > 0 && j >= 0) {
+                if (i % 2 === 0) {
+                    pushIndex(iVertex - (stepR + 1));
+                    pushIndex(iVertex);
+                } else {
+                    if (j < stepR) {
+                        pushIndex(iVertex - (stepR + 1));
+                        pushIndex(iVertex);
+                    }
+                }
+            }
         }
     }
 }

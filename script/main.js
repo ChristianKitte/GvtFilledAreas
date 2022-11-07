@@ -6,10 +6,10 @@ function RefreshWaves(modellNr) {
     // Arrays für neue Ausgabe füllen
     switch (modellNr) {
         case 1:
-            alert("Modell 1 wird angezeigt...")
+            getFigure1VerticesPointsArray();
             break;
         case 2:
-            alert("Modell 2 wird angezeigt...")
+            getFigure2VerticesPointsArray();
             break;
         case 3:
             getFigure3VerticesPointsArray();
@@ -28,7 +28,7 @@ function RefreshWaves(modellNr) {
     gl.enableVertexAttribArray(aColor);
 
     // Zeiger erzeugen und konfigurieren
-    gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 7 * 4, 0);
+    gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 7 * 4, 0);
     gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, 7 * 4, 3 * 4);
 
     // alte Ausgabe löschen
@@ -37,7 +37,7 @@ function RefreshWaves(modellNr) {
     var ibo = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, verticesIndex, gl.STATIC_DRAW);
-    ibo.numerOfEmements = verticesIndex.length/7;
+    ibo.numerOfEmements = verticesIndex.length;
 
     // Ausgabe
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
