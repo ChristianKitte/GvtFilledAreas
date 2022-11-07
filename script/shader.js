@@ -4,7 +4,7 @@
  */
 const vertexShaderSource = `#version 300 es  
     
-    in vec2 aPosition;
+    in vec3 aPosition;
     in vec4 aColor;
     
     out vec4 vColor;
@@ -12,9 +12,8 @@ const vertexShaderSource = `#version 300 es
     void main()
     {
         vColor = vec4(aColor);
-        //vColor=vec4(0,1,0,1);
         
-        gl_Position=vec4(aPosition, 0.0, 365);
+        gl_Position=vec4(aPosition, 365);
         gl_PointSize=1.0;       
     }
 `;
@@ -34,6 +33,5 @@ const fragmentShaderSouce = `#version 300 es
     void main()
     {        
         fragColor=vColor;
-        //fragColor=vec4(1.0, 0.0, 0.0, 1.0);
     }
 `;

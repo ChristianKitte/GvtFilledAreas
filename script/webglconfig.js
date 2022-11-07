@@ -5,15 +5,20 @@
 const gl = getContext(0.9, 0.9, 0.9, 1);
 
 /**
+ * Das Aktuell gültige WebGL Programm
+ */
+const program = gl.createProgram();
+
+/**
  * Erzeugt einen WebGL Kontext mit dem als RGB übergebenen Farbwert als Hintergrund
  * und gibt diesen zurück. Zusätzlich wird der Ausgabebereich vergrößert
  *
  * http://www.ibesora.me/creating-a-webgl2-canvas/
  *
- * @param redVal Der Rotwert
- * @param greenVal Der Grünwert
- * @param blueVal Der Blauwert
- * @param alphaVal Der Aplhawert
+ * @param redVal Der Rotwert des Hintergrundes
+ * @param greenVal Der Grünwert des Hintergrundes
+ * @param blueVal Der Blauwert des Hintergrundes
+ * @param alphaVal Der Aplhawert des Hintergrundes
  * @returns {*} Einen WebGL Kontext
  */
 function getContext(redVal, greenVal, blueVal, alphaVal) {
@@ -25,15 +30,10 @@ function getContext(redVal, greenVal, blueVal, alphaVal) {
     gl.viewportHeight = canvas.height;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-    gl.clearColor(0.9, 0.9, 0.9, 1);//RGB der Hintergrundfarbe
+    gl.clearColor(redVal, greenVal, blueVal, alphaVal);//RGB der Hintergrundfarbe
 
     return gl;
 }
-
-/**
- * Das Aktuell gültige WebGL Programm
- */
-const program = gl.createProgram();
 
 /**
  * Initialisiert und konfiguriert die WebGL Anwendung und definiert die Shader und
@@ -59,6 +59,6 @@ function iniWebGLApp() {
 
     gl.useProgram(program);
 
-    // start drawing
+    // start drawing within main
     RefreshWaves();
 }

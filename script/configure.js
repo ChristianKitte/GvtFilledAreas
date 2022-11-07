@@ -29,7 +29,7 @@ var infoText = document.getElementById("info_text");
  */
 document.getElementById("show_line").onchange = () => {
     showLine = document.getElementById("show_line").checked;
-    RefreshWave();
+    RefreshWave(activeModel);
 }
 
 /***
@@ -65,7 +65,7 @@ function setInfoText() {
 document.getElementById("figure1").onclick = () => {
     activeModel = 1;
     setInfoText();
-    RefreshWaves();
+    RefreshWaves(activeModel);
 }
 
 /**
@@ -74,7 +74,7 @@ document.getElementById("figure1").onclick = () => {
 document.getElementById("figure2").onclick = () => {
     activeModel = 2;
     setInfoText();
-    RefreshWaves();
+    RefreshWaves(activeModel);
 }
 
 /**
@@ -83,7 +83,7 @@ document.getElementById("figure2").onclick = () => {
 document.getElementById("figure3").onclick = () => {
     activeModel = 3;
     setInfoText();
-    RefreshWaves();
+    RefreshWaves(activeModel);
 }
 
 
