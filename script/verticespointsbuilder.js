@@ -35,7 +35,7 @@ function getFigure1VerticesPointsArray() {
     verticesIndexTriangle = new Uint16Array([]);
 
     // a Durchmesser
-    let a = 2;
+    let a = 1;
     // b reelle Zahl mit b<a
     let b = 4;
 
@@ -51,6 +51,8 @@ function getFigure1VerticesPointsArray() {
     let stepV = 30
     let dv = vMax / stepV;
 
+    let opax=0.0;
+    let opax2=1.0;
     //let h = Math.exp(u / (6 * Math.PI));
 
     //x = a * (1 - h) * cos(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
@@ -69,14 +71,14 @@ function getFigure1VerticesPointsArray() {
             let z = a * (-1 + h) * Math.sin(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
 
             // Punkte definieren
-            pushVertices(x * 80); // X Koordinate
-            pushVertices(y * 80); // Y Koordinate
-            pushVertices(z * 80); // Z Koordinate
+            pushVertices(x * 100); // X Koordinate
+            pushVertices(y * 100); // Y Koordinate
+            pushVertices(z * 100); // Z Koordinate
 
             if (j % 2 == 0) {
-                pushVertices(1.0, 0.0, 0.0, 1); // Farbwert
+                pushVertices(0.0, opax2-=0.001, 0.0, 1); // Farbwert
             } else {
-                pushVertices(0.0, 0.0, 1.0, 1); // Farbwert
+                pushVertices(0.0, opax2-=0.001, 0.0, 1); // Farbwert
             }
 
             // Define index for one Line
