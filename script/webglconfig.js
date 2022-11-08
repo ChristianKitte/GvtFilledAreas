@@ -57,6 +57,14 @@ function iniWebGLApp() {
         console.log(gl.getShaderInfoLog(fragmentShaderSouce));
     }
 
+    gl.frontFace(gl.CW);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+
+    // Polygon offset of rastered Fragments.
+    gl.enable(gl.POLYGON_OFFSET_FILL);
+    gl.polygonOffset(0.0, 1.0);
+
     gl.useProgram(program);
 
     // start drawing within main

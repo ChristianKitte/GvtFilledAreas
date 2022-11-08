@@ -5,10 +5,16 @@
 var vertices = new Float32Array([]);
 
 /**
- * Array, das die aktuellen VerticesIndizes für die Ausgabe hält
+ * Array, das die aktuellen VerticesIndizes für die Linien Ausgabe hält
  * @type {Uint16Array}
  */
-var verticesIndex = new Uint16Array([]);
+var verticesIndexLine = new Uint16Array([]);
+
+/**
+ * Array, das die aktuellen VerticesIndizes für die Dreiecks Ausgabe hält
+ * @type {Uint16Array}
+ */
+var verticesIndexTriangle = new Uint16Array([]);
 
 /**
  * Hilfsfunktion, um im Array vertices dynamisch einen neuen Wert
@@ -23,13 +29,21 @@ function pushVertices() {
 }
 
 /**
- * Hilfsfunktion, um im Array verticesIndex dynamisch einen neuen Wert
+ * Hilfsfunktion, um im Array verticesIndexLine dynamisch einen neuen Wert
  * hinzuzufügen
  *
  */
-function pushIndex() {
-    verticesIndex = new Uint16Array([...verticesIndex, ...arguments]);
+function pushIndexLine() {
+    verticesIndexLine = new Uint16Array([...verticesIndexLine, ...arguments]);
 }
 
+/**
+ * Hilfsfunktion, um im Array verticesIndexTriangle dynamisch einen neuen Wert
+ * hinzuzufügen
+ *
+ */
+function pushIndexTriangle() {
+    verticesIndexTriangle = new Uint16Array([...verticesIndexTriangle, ...arguments]);
+}
 
 

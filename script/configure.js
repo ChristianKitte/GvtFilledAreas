@@ -29,7 +29,7 @@ var infoText = document.getElementById("info_text");
  */
 document.getElementById("show_line").onchange = () => {
     showLine = document.getElementById("show_line").checked;
-    RefreshWave(activeModel);
+    RefreshWaves(activeModel);
 }
 
 /***

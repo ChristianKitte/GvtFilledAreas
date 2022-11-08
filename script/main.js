@@ -20,6 +20,9 @@ function RefreshWaves(modellNr) {
     var vbo = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
 
+    var ibo = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
+
     // posAttrib erzeugen und verwenden
     var aPosition = gl.getAttribLocation(program, 'aPosition');
     gl.enableVertexAttribArray(aPosition);
@@ -34,15 +37,22 @@ function RefreshWaves(modellNr) {
     // alte Ausgabe löschen
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    var ibo = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, verticesIndex, gl.STATIC_DRAW);
-    ibo.numerOfEmements = verticesIndex.length;
-
     // Ausgabe
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, verticesIndexTriangle, gl.STATIC_DRAW);
+    ibo.numerOfEmements = verticesIndexTriangle.length;
+
+    gl.drawElements(gl.TRIANGLES, ibo.numerOfEmements, gl.UNSIGNED_SHORT, 0);
+
+    if (showLine) {
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, verticesIndexLine, gl.STATIC_DRAW);
+        ibo.numerOfEmements = verticesIndexLine.length;
+        gl.disableVertexAttribArray(aColor);
+        gl.drawElements(gl.LINES, ibo.numerOfEmements, gl.UNSIGNED_SHORT, 0);
+    }
+
+
     //gl.drawArrays(gl.LINES, 0, vertices.length / 6);
-    gl.drawElements(gl.LINES, ibo.numerOfEmements, gl.UNSIGNED_SHORT, 0);
 }
 
 /**

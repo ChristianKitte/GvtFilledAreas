@@ -28,39 +28,79 @@ function cosinusFromDegree(degree, y_scale) {
  * Baut die Vertices Array für die Figur 1 (Möbiusband)
  */
 function getFigure1VerticesPointsArray() {
+    // basiert auf http://www.3d-meier.de/tut3/Seite17.html
+
     vertices = new Float32Array([]);
-    verticesIndex = new Uint16Array([]);
-    let indexCounter = 0;
+    verticesIndexLine = new Uint16Array([]);
+    verticesIndexTriangle = new Uint16Array([]);
 
-    let a = 100.0;
-    let b = 200.0
-    let c = 150.0
+    // a Durchmesser
+    let a = 2;
+    // b reelle Zahl mit b<a
+    let b = 4;
 
-    let n = 10.0;
-    let du = a / n;
+    //u ist Element aus der Zahlenmenge [0, 6 pi]
+    let u = 0;
+    let uMax = 6 * Math.PI;
+    let stepU = 30;
+    let du = uMax / stepU;
 
-    let m = 10.0;
-    let dv = Math.pi * 2.0 / m;
+    //v ist Element aus der Zahlenmenge [0, 2 pi]
+    let v = 0.0;
+    let vMax = 2 * Math.PI;
+    let stepV = 30
+    let dv = vMax / stepV;
 
-    for (let v = 0, i = 0; i < m; v += dv, i++) {
-        for (let u = 0, j = 0; j < n; u += du, j++) {
+    //let h = Math.exp(u / (6 * Math.PI));
 
-            x = c * Math.sqrt(u * (u - a) * (u - b)) * Math.sin(v) * 50;
-            y = u * 50;
-            z = c * Math.sqrt(u * (u - a) * (u - b)) * Math.cos(v) * 50;
+    //x = a * (1 - h) * cos(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
+    //y = 1 - Math.exp(u / (b * Math.PI)) - Math.sin(v) + h * Math.sin(v);
+    //z = a * (-1 + h) * Math.sin(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
+    for (let u = 0.0, i = 0; i <= stepU; u += du, i++) {
+        for (let v = 0.0, j = 0; j <= stepV; v += dv, j++) {
 
-            pushVertices(x, y, z, 1.0, 0.0, 0.0, 1);
-            pushIndex(indexCounter++);
-            pushIndex(indexCounter++);
-            pushIndex(indexCounter++);
-            pushIndex(indexCounter++);
-            pushIndex(indexCounter++);
-            pushIndex(indexCounter++);
-            pushIndex(indexCounter++);
+            let h = Math.exp(u / (6 * Math.PI));
+
+
+            let iVertex = j * (stepV + 1) + i; // ==> Anzahl der Knoten
+
+            let x = a * (1 - h) * Math.cos(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
+            let y = 1 - Math.exp(u / (b * Math.PI)) - Math.sin(v) + h * Math.sin(v);
+            let z = a * (-1 + h) * Math.sin(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
+
+            // Punkte definieren
+            pushVertices(x * 80); // X Koordinate
+            pushVertices(y * 80); // Y Koordinate
+            pushVertices(z * 80); // Z Koordinate
+
+            if (j % 2 == 0) {
+                pushVertices(1.0, 0.0, 0.0, 1); // Farbwert
+            } else {
+                pushVertices(0.0, 0.0, 1.0, 1); // Farbwert
+            }
+
+            // Define index for one Line
+            if (i > 0 && j >= 0) { // Tiefe
+                pushIndexLine(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
+                pushIndexLine(iVertex);
+            }
+            if (i > 0 && j >= 0) { // Kreise
+                pushIndexLine(iVertex - (stepV + 1));
+                pushIndexLine(iVertex);
+            }
+
+            // Define index for two triangles.
+            if (j > 0 && i > 0) {
+                pushIndexTriangle(iVertex);
+                pushIndexTriangle(iVertex - 1);
+                pushIndexTriangle(iVertex - (stepV + 1));
+                //
+                pushIndexTriangle(iVertex - 1);
+                pushIndexTriangle(iVertex - (stepV + 1) - 1);
+                pushIndexTriangle(iVertex - (stepV + 1));
+            }
         }
     }
-
-
 }
 
 /**
@@ -75,37 +115,70 @@ function getFigure2VerticesPointsArray() {
  */
 function getFigure3VerticesPointsArray() {
     vertices = new Float32Array([]);
-    verticesIndex = new Uint16Array([]);
+    verticesIndexLine = new Uint16Array([]);
+    verticesIndexTriangle = new Uint16Array([]);
 
+    // Parameter Winkel/Grad
     let stepT = 16
     let dg = 360 / stepT;
 
+    // Parameter Radius
     let stepR = 3;
     let dr = 250 / stepR;
 
     for (let grad = 0.0, i = 0; i <= stepT; grad += dg, i++) {
         for (let radius = 0.0, j = 0; j <= stepR; radius += dr, j++) {
-            var iVertex = i * (stepR + 1) + j; // ==> Anzahl der Knoten
+            let iVertex = i * (stepR + 1) + j; // ==> Anzahl der Knoten
 
             // Punkte definieren
             pushVertices(sinusFromDegree(grad, radius)); // X Koordinate
             pushVertices(cosinusFromDegree(grad, radius)); // Y Koordinate
             pushVertices(0); // Z Koordinate
-            pushVertices(1.0, 0.0, 0.0, 1); // Farbwert
 
-            // Ausgabe definieren
-            if (i > 0 && j >= 0) {
-                pushIndex(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
-                pushIndex(iVertex);
+            if (i % 2 == 0) {
+                pushVertices(1.0, 0.0, 0.0, 1); // Farbwert
+            } else if (i % 3 == 0) {
+                pushVertices(0.0, 1.0, 0.0, 1); // Farbwert
+            } else {
+                pushVertices(0.0, 0.0, 1.0, 1); // Farbwert
             }
-            if (i > 0 && j >= 0) {
+
+            // Define index for one Line
+            if (i > 0 && j >= 0) { // Radien
+                pushIndexLine(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
+                pushIndexLine(iVertex);
+            }
+            if (i > 0 && j >= 0) { // Kreise
                 if (i % 2 === 0) {
-                    pushIndex(iVertex - (stepR + 1));
-                    pushIndex(iVertex);
+                    pushIndexLine(iVertex - (stepR + 1));
+                    pushIndexLine(iVertex);
                 } else {
                     if (j < stepR) {
-                        pushIndex(iVertex - (stepR + 1));
-                        pushIndex(iVertex);
+                        pushIndexLine(iVertex - (stepR + 1));
+                        pushIndexLine(iVertex);
+                    }
+                }
+            }
+
+            // Define index for two triangles.
+            if (j > 0 && i > 0) {
+                if (i % 2 === 0) {
+                    pushIndexTriangle(iVertex);
+                    pushIndexTriangle(iVertex - 1);
+                    pushIndexTriangle(iVertex - (stepR + 1));
+                    //
+                    pushIndexTriangle(iVertex - 1);
+                    pushIndexTriangle(iVertex - (stepR + 1) - 1);
+                    pushIndexTriangle(iVertex - (stepR + 1));
+                } else {
+                    if (j < stepR) {
+                        pushIndexTriangle(iVertex);
+                        pushIndexTriangle(iVertex - 1);
+                        pushIndexTriangle(iVertex - (stepR + 1));
+                        //
+                        pushIndexTriangle(iVertex - 1);
+                        pushIndexTriangle(iVertex - (stepR + 1) - 1);
+                        pushIndexTriangle(iVertex - (stepR + 1));
                     }
                 }
             }
