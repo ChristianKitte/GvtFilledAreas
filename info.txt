@@ -1,1 +1,5 @@
 http://www.3d-meier.de/tut3/Seite0.html
+
+https://github.com/toji/gl-matrix
+https://glmatrix.net/docs/
+https://math.hws.edu/graphicsbook/c7/s1.html#webgl3d.1.2

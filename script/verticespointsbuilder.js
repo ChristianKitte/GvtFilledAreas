@@ -41,7 +41,7 @@ function getFigure1VerticesPointsArray() {
 
     //u ist Element aus der Zahlenmenge [0, 6 pi]
     let u = 0;
-    let uMax = 6 * Math.PI;
+    let uMax = 4 * Math.PI;
     let stepU = 30;
     let du = uMax / stepU;
 
@@ -54,6 +54,9 @@ function getFigure1VerticesPointsArray() {
     let opax = 0.0;
     let opax2 = 1.0;
 
+    var R = 1.0;
+    var G = 0.0;
+
     for (let u = 0.0, i = 0; i <= stepU; u += du, i++) {
         for (let v = 0.0, j = 0; j <= stepV; v += dv, j++) {
 
@@ -61,6 +64,8 @@ function getFigure1VerticesPointsArray() {
 
 
             let iVertex = j * (stepV + 1) + i; // ==> Anzahl der Knoten
+
+            var B = 0.0;
 
             let x = a * (1 - h) * Math.cos(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
             let y = 1 - Math.exp(u / (b * Math.PI)) - Math.sin(v) + h * Math.sin(v);
@@ -71,10 +76,17 @@ function getFigure1VerticesPointsArray() {
             pushVertices(y * 100); // Y Koordinate
             pushVertices(z * 100); // Z Koordinate
 
+            pushVertices(R, G, B, 1); // Farbwert
+
+            R -= 1.0 / (stepU * stepV);
+            G += 1.0 / (stepU * stepV);
+            B += 1.0 / 2 * stepV;
+
+
             if (j % 2 == 0) {
-                pushVertices(0.0, opax2 -= 0.001, 0.0, 1); // Farbwert
+                //pushVertices(0.0, opax2 -= 0.001, 0.0, 1); // Farbwert
             } else {
-                pushVertices(0.0, opax2 -= 0.001, 0.0, 1); // Farbwert
+                //pushVertices(0.0, opax2 -= 0.001, 0.0, 1); // Farbwert
             }
 
             // Define index for one Line
@@ -123,10 +135,16 @@ function getFigure2VerticesPointsArray() {
     let stepV = 30;
     let dv = (vMax - vMin) / stepV;
 
+    var R = 1.0;
+    var G = 0.0;
 
-    for (let u = uMin, i = 0; i <= stepU; u += du, i++) {
-        for (let v = vMin, j = 0; j <= stepV; v += dv, j++) {
-            let iVertex = i * (stepU + 1) + j; // ==> Anzahl der Knoten
+
+    for (let u = uMin, i = 0; i <= stepU; i++, u += du) {
+
+        for (let v = vMin, j = 0; j <= stepV; j++, v += dv) {
+            let iVertex = i * (stepV + 1) + j; // ==> Anzahl der Knoten
+
+            var B = 0.0;
 
             let x = u * v;
             let y = u;
@@ -136,15 +154,19 @@ function getFigure2VerticesPointsArray() {
             pushVertices(x * 100); // X Koordinate
             pushVertices(y * 100); // Y Koordinate
             pushVertices(z * 100); // Z Koordinate
-            pushVertices(0.0, 1.0, 0.0, 1); // Farbwert
+            pushVertices(R, G, B, 1); // Farbwert
+
+            R -= 1.0 / (stepU * stepV);
+            G += 1.0 / (stepU * stepV);
+            B += 1.0 / 2 * stepV;
 
             // Define index for one Line
-            if (i > 0 && j >= 0) {
+            if (i > 0 && j > 0) {
                 pushIndexLine(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
                 pushIndexLine(iVertex);
             }
-            if (i > 0 && j >= 0) {
-                pushIndexLine(iVertex - (stepV + 1));
+            if (i > 0 && j > 0) {
+                pushIndexLine(iVertex - 1 - (stepV + 1));
                 pushIndexLine(iVertex);
             }
 
@@ -154,8 +176,8 @@ function getFigure2VerticesPointsArray() {
                 pushIndexTriangle(iVertex - 1);
                 pushIndexTriangle(iVertex - (stepV + 1));
                 //
-                pushIndexTriangle(iVertex - 1);
-                pushIndexTriangle(iVertex - (stepV + 1) - 1);
+                pushIndexTriangle(iVertex);
+                pushIndexTriangle(iVertex - 1 - (stepV + 1));
                 pushIndexTriangle(iVertex - (stepV + 1));
             }
         }

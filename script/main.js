@@ -53,7 +53,7 @@ function RefreshWaves(modellNr) {
     }
 
 
-    //gl.drawArrays(gl.LINES, 0, vertices.length / 6);
+
 }
 
 /**
