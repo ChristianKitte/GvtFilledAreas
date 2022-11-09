@@ -51,13 +51,9 @@ function getFigure1VerticesPointsArray() {
     let stepV = 30
     let dv = vMax / stepV;
 
-    let opax=0.0;
-    let opax2=1.0;
-    //let h = Math.exp(u / (6 * Math.PI));
+    let opax = 0.0;
+    let opax2 = 1.0;
 
-    //x = a * (1 - h) * cos(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
-    //y = 1 - Math.exp(u / (b * Math.PI)) - Math.sin(v) + h * Math.sin(v);
-    //z = a * (-1 + h) * Math.sin(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
     for (let u = 0.0, i = 0; i <= stepU; u += du, i++) {
         for (let v = 0.0, j = 0; j <= stepV; v += dv, j++) {
 
@@ -76,9 +72,9 @@ function getFigure1VerticesPointsArray() {
             pushVertices(z * 100); // Z Koordinate
 
             if (j % 2 == 0) {
-                pushVertices(0.0, opax2-=0.001, 0.0, 1); // Farbwert
+                pushVertices(0.0, opax2 -= 0.001, 0.0, 1); // Farbwert
             } else {
-                pushVertices(0.0, opax2-=0.001, 0.0, 1); // Farbwert
+                pushVertices(0.0, opax2 -= 0.001, 0.0, 1); // Farbwert
             }
 
             // Define index for one Line
@@ -109,7 +105,61 @@ function getFigure1VerticesPointsArray() {
  * Baut die Vertices Array für die Figur 2
  */
 function getFigure2VerticesPointsArray() {
+    //http://www.3d-meier.de/tut3/Seite22.html
 
+    vertices = new Float32Array([]);
+    verticesIndexLine = new Uint16Array([]);
+    verticesIndexTriangle = new Uint16Array([]);
+
+    //u ist Element aus der Zahlenmenge [-1.5, 1.5]
+    let uMin = -1.5;
+    let uMax = 1.5;
+    let stepU = 30;
+    let du = (uMax - uMin) / stepU;
+
+    //v ist Element aus der Zahlenmenge [-1.5, 1.5]
+    let vMin = -1.5;
+    let vMax = 1.5;
+    let stepV = 30;
+    let dv = (vMax - vMin) / stepV;
+
+
+    for (let u = uMin, i = 0; i <= stepU; u += du, i++) {
+        for (let v = vMin, j = 0; j <= stepV; v += dv, j++) {
+            let iVertex = i * (stepU + 1) + j; // ==> Anzahl der Knoten
+
+            let x = u * v;
+            let y = u;
+            let z = Math.pow(v, 2);
+
+            // Punkte definieren
+            pushVertices(x * 100); // X Koordinate
+            pushVertices(y * 100); // Y Koordinate
+            pushVertices(z * 100); // Z Koordinate
+            pushVertices(0.0, 1.0, 0.0, 1); // Farbwert
+
+            // Define index for one Line
+            if (i > 0 && j >= 0) {
+                pushIndexLine(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
+                pushIndexLine(iVertex);
+            }
+            if (i > 0 && j >= 0) {
+                pushIndexLine(iVertex - (stepV + 1));
+                pushIndexLine(iVertex);
+            }
+
+            // Define index for two triangles.
+            if (i > 0 && j >= 0) {
+                pushIndexTriangle(iVertex);
+                pushIndexTriangle(iVertex - 1);
+                pushIndexTriangle(iVertex - (stepV + 1));
+                //
+                pushIndexTriangle(iVertex - 1);
+                pushIndexTriangle(iVertex - (stepV + 1) - 1);
+                pushIndexTriangle(iVertex - (stepV + 1));
+            }
+        }
+    }
 }
 
 /**

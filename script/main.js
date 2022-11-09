@@ -35,7 +35,8 @@ function RefreshWaves(modellNr) {
     gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, 7 * 4, 3 * 4);
 
     // alte Ausgabe löschen
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    //gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Ausgabe
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);

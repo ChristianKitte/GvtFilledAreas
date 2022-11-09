@@ -61,9 +61,13 @@ function iniWebGLApp() {
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
 
+    // Depth(Z)-Buffer.
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+
     // Polygon offset of rastered Fragments.
     gl.enable(gl.POLYGON_OFFSET_FILL);
-    gl.polygonOffset(0.0, 1.0);
+    gl.polygonOffset(1.0, 1.0);
 
     gl.useProgram(program);
 
