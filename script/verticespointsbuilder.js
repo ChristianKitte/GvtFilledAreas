@@ -30,18 +30,18 @@ function getFigure1VerticesPointsArray() {
     verticesIndexTriangle = new Uint16Array([]);
 
     // a Durchmesser
-    let a = 1;
+    let a = 1.0;
     // b reelle Zahl mit b<a
-    let b = 4;
+    let b = 4.0;
 
     //u ist Element aus der Zahlenmenge [0, 6 pi]
-    let uMax = 4 * Math.PI;
-    let stepU = 30;
+    let uMax = 4.0 * Math.PI;
+    let stepU = 30.0;
     let du = uMax / stepU;
 
     //v ist Element aus der Zahlenmenge [0, 2 pi]
-    let vMax = 2 * Math.PI;
-    let stepV = 30
+    let vMax = 2.0 * Math.PI;
+    let stepV = 30.0
     let dv = vMax / stepV;
 
     // Farbwerte
@@ -50,21 +50,21 @@ function getFigure1VerticesPointsArray() {
     let B = 0.0;
 
     for (let u = 0.0, i = 0; i <= stepU; u += du, i++) {
-        let h = Math.exp(u / (6 * Math.PI));
+        let h = Math.exp(u / (6.0 * Math.PI));
 
         for (let v = 0.0, j = 0; j <= stepV; v += dv, j++) {
             let iVertex = j * (stepV + 1) + i; // ==> Anzahl der Knoten
 
-            let x = a * (1 - h) * Math.cos(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
-            let y = 1 - Math.exp(u / (b * Math.PI)) - Math.sin(v) + h * Math.sin(v);
-            let z = a * (-1 + h) * Math.sin(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
+            let x = a * (1.0 - h) * Math.cos(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
+            let y = 1.0 - Math.exp(u / (b * Math.PI)) - Math.sin(v) + h * Math.sin(v);
+            let z = a * (-1.0 + h) * Math.sin(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
 
             // define vertices
-            pushVertices(x * 100); // X Koordinate
-            pushVertices(y * 100); // Y Koordinate
-            pushVertices(z * 100); // Z Koordinate
+            pushVertices(x * 100.0); // X Koordinate
+            pushVertices(y * 100.0); // Y Koordinate
+            pushVertices(z * 100.0); // Z Koordinate
 
-            pushVertices(R, G, B, 1); // Farbwert
+            pushVertices(R, G, B, 1.0); // Farbwert
 
             R -= 1.0 / (stepU * stepV);
             G += 1.0 / (stepU * stepV);
