@@ -25,7 +25,7 @@ Im Rahmen der vierten Einsendeaufgabe sollen zunächst zusammenhängende Fläche
 
 Bei der Ausführung kann es zu Wartezeiten kommen, bis die Modelle durchgerechnet und zur Anzeige gebracht  werden. Insbesondere werden **CULL_FACE** und **DEPTH_TEST** eingesetzt, um Fragmente nur anzuzeigen, wenn ihre  Vorderseite sichtbar ist, oder sie verdeckt sind. Zur Anwendung kommt hier **CW (ClockWise)**. 
 
-Um trotz der farbiger Vertices, wie sie für die Farbe der Fragmente notwendig sind, schwarze Linien zu erhalten, wurde vor deren Ausgabe das entsprechende Farbattribut disabled.
+Um trotz der farbigen Vertices, wie sie für die Farbe der Fragmente notwendig sind, schwarze Linien zu erhalten, wurde vor deren Ausgabe das entsprechende Farbattribut disabled.
 
 Modell 1: Schnecke
 
