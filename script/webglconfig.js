@@ -72,5 +72,7 @@ function iniWebGLApp() {
     gl.useProgram(program);
 
     // start drawing within main
-    RefreshWaves();
+    activeModel = 1;
+    setInfoText();
+    RefreshWaves(activeModel);
 }

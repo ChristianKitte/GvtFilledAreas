@@ -20,6 +20,12 @@ var showLine = document.getElementById("show_line").checked;
  */
 var infoText = document.getElementById("info_text");
 
+/**
+ * Der Infolink für das angezeigte Modell
+ * @type {HTMLElement}
+ */
+var infoLink = document.getElementById("info_link");
+
 //*************************************************************************
 // UI Handler
 //*************************************************************************
@@ -43,18 +49,28 @@ function setInfoText() {
     switch (activeModel) {
         case 1:
             // code block
-            infoText.innerText = "Aktuell wird die Figur 1 angezeigt";
+            // http://www.3d-meier.de/tut3/Seite17.html
+            infoText.innerText = "Aktuell wird die Figur 1 (Schnecke) angezeigt";
             document.getElementById("figure1").classList.add("btn-success");
+            infoLink.href = "http://www.3d-meier.de/tut3/Seite17.html";
+            infoLink.style.visibility="visible";
+            infoLink.innerText="(Basis)";
             break;
         case 2:
             // code block
-            infoText.innerText = "Aktuell wird die Figur 2 angezeigt";
+            // http://www.3d-meier.de/tut3/Seite22.html
+            infoText.innerText = "Aktuell wird die Figur 2 (Whitney Umbrella) angezeigt";
             document.getElementById("figure2").classList.add("btn-success");
+            infoLink.href = "http://www.3d-meier.de/tut3/Seite22.html";
+            infoLink.style.visibility="visible";
+            infoLink.innerText="(Basis)";
             break;
         case 3:
             // code block
-            infoText.innerText = "Aktuell wird die Figur 3 angezeigt";
+            // Basiert auf dem Spinnennetz
+            infoText.innerText = "Aktuell wird die Figur 3 (Zahnrad) angezeigt";
             document.getElementById("figure3").classList.add("btn-success");
+            infoLink.style.visibility="hidden";
             break;
     }
 }

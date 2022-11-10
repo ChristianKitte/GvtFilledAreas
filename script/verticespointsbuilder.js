@@ -6,9 +6,7 @@
  */
 function sinusFromDegree(degree, y_scale) {
     let radians = degree * Math.PI / 180.0;
-    let y_pos = Math.sin(radians) * y_scale;
-
-    return y_pos;
+    return Math.sin(radians) * y_scale;
 }
 
 /**
@@ -19,17 +17,14 @@ function sinusFromDegree(degree, y_scale) {
  */
 function cosinusFromDegree(degree, y_scale) {
     let radians = degree * Math.PI / 180.0;
-    let y_pos = Math.cos(radians) * y_scale;
-
-    return y_pos;
+    return Math.cos(radians) * y_scale;
 }
 
 /**
- * Baut die Vertices Array für die Figur 1 (Möbiusband)
+ * Baut die Vertices Array für die Figur 1 auf Basis enes Modells auf
+ * basiert auf http://www.3d-meier.de/tut3/Seite17.html
  */
 function getFigure1VerticesPointsArray() {
-    // basiert auf http://www.3d-meier.de/tut3/Seite17.html
-
     vertices = new Float32Array([]);
     verticesIndexLine = new Uint16Array([]);
     verticesIndexTriangle = new Uint16Array([]);
@@ -40,38 +35,31 @@ function getFigure1VerticesPointsArray() {
     let b = 4;
 
     //u ist Element aus der Zahlenmenge [0, 6 pi]
-    let u = 0;
     let uMax = 4 * Math.PI;
     let stepU = 30;
     let du = uMax / stepU;
 
     //v ist Element aus der Zahlenmenge [0, 2 pi]
-    let v = 0.0;
     let vMax = 2 * Math.PI;
     let stepV = 30
     let dv = vMax / stepV;
 
-    let opax = 0.0;
-    let opax2 = 1.0;
-
-    var R = 1.0;
-    var G = 0.0;
+    // Farbwerte
+    let R = 1.0;
+    let G = 0.0;
+    let B = 0.0;
 
     for (let u = 0.0, i = 0; i <= stepU; u += du, i++) {
+        let h = Math.exp(u / (6 * Math.PI));
+
         for (let v = 0.0, j = 0; j <= stepV; v += dv, j++) {
-
-            let h = Math.exp(u / (6 * Math.PI));
-
-
             let iVertex = j * (stepV + 1) + i; // ==> Anzahl der Knoten
-
-            var B = 0.0;
 
             let x = a * (1 - h) * Math.cos(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
             let y = 1 - Math.exp(u / (b * Math.PI)) - Math.sin(v) + h * Math.sin(v);
             let z = a * (-1 + h) * Math.sin(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
 
-            // Punkte definieren
+            // define vertices
             pushVertices(x * 100); // X Koordinate
             pushVertices(y * 100); // Y Koordinate
             pushVertices(z * 100); // Z Koordinate
@@ -80,14 +68,6 @@ function getFigure1VerticesPointsArray() {
 
             R -= 1.0 / (stepU * stepV);
             G += 1.0 / (stepU * stepV);
-            B += 1.0 / 2 * stepV;
-
-
-            if (j % 2 == 0) {
-                //pushVertices(0.0, opax2 -= 0.001, 0.0, 1); // Farbwert
-            } else {
-                //pushVertices(0.0, opax2 -= 0.001, 0.0, 1); // Farbwert
-            }
 
             // Define index for one Line
             if (i > 0 && j >= 0) { // Tiefe
@@ -99,26 +79,33 @@ function getFigure1VerticesPointsArray() {
                 pushIndexLine(iVertex);
             }
 
-            // Define index for two triangles.
+            // Define index for two triangles (CW und CCW).
             if (j > 0 && i > 0) {
                 pushIndexTriangle(iVertex);
                 pushIndexTriangle(iVertex - 1);
                 pushIndexTriangle(iVertex - (stepV + 1));
+                // ...die Rückseite
+                pushIndexTriangle(iVertex - (stepV + 1));
+                pushIndexTriangle(iVertex - 1);
+                pushIndexTriangle(iVertex);
                 //
                 pushIndexTriangle(iVertex - 1);
                 pushIndexTriangle(iVertex - (stepV + 1) - 1);
                 pushIndexTriangle(iVertex - (stepV + 1));
+                // ...die Rückseite
+                pushIndexTriangle(iVertex - (stepV + 1));
+                pushIndexTriangle(iVertex - (stepV + 1) - 1);
+                pushIndexTriangle(iVertex - 1);
             }
         }
     }
 }
 
 /**
- * Baut die Vertices Array für die Figur 2
+ * Baut die Vertices Array für die Figur 2 auf Basis enes Modells auf
+ * http://www.3d-meier.de/tut3/Seite22.html
  */
 function getFigure2VerticesPointsArray() {
-    //http://www.3d-meier.de/tut3/Seite22.html
-
     vertices = new Float32Array([]);
     verticesIndexLine = new Uint16Array([]);
     verticesIndexTriangle = new Uint16Array([]);
@@ -135,22 +122,21 @@ function getFigure2VerticesPointsArray() {
     let stepV = 30;
     let dv = (vMax - vMin) / stepV;
 
+    // Farbwerte
     var R = 1.0;
     var G = 0.0;
-
+    var B = 0.0;
 
     for (let u = uMin, i = 0; i <= stepU; i++, u += du) {
 
         for (let v = vMin, j = 0; j <= stepV; j++, v += dv) {
             let iVertex = i * (stepV + 1) + j; // ==> Anzahl der Knoten
 
-            var B = 0.0;
-
             let x = u * v;
             let y = u;
             let z = Math.pow(v, 2);
 
-            // Punkte definieren
+            // define vertices
             pushVertices(x * 100); // X Koordinate
             pushVertices(y * 100); // Y Koordinate
             pushVertices(z * 100); // Z Koordinate
@@ -158,7 +144,6 @@ function getFigure2VerticesPointsArray() {
 
             R -= 1.0 / (stepU * stepV);
             G += 1.0 / (stepU * stepV);
-            B += 1.0 / 2 * stepV;
 
             // Define index for one Line
             if (i > 0 && j > 0) {
@@ -170,7 +155,7 @@ function getFigure2VerticesPointsArray() {
                 pushIndexLine(iVertex);
             }
 
-            // Define index for two triangles.
+            // Define index for two triangles
             if (i > 0 && j >= 0) {
                 pushIndexTriangle(iVertex);
                 pushIndexTriangle(iVertex - 1);
@@ -209,9 +194,9 @@ function getFigure3VerticesPointsArray() {
             pushVertices(cosinusFromDegree(grad, radius)); // Y Koordinate
             pushVertices(0); // Z Koordinate
 
-            if (i % 2 == 0) {
+            if (i % 2 === 0) {
                 pushVertices(1.0, 0.0, 0.0, 1); // Farbwert
-            } else if (i % 3 == 0) {
+            } else if (i % 3 === 0) {
                 pushVertices(0.0, 1.0, 0.0, 1); // Farbwert
             } else {
                 pushVertices(0.0, 0.0, 1.0, 1); // Farbwert
