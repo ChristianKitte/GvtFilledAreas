@@ -13,7 +13,7 @@ Informatics**
 
 ---
 
-### Einsendeaufgabe EA4 : Eingefärbte Flächen.
+### Einsendeaufgabe EA4 : Eingefärbte Flächen
 
 [zur Webseite](https://gvt.ckitte.de/ea4/)
 
