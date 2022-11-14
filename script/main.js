@@ -37,24 +37,19 @@ function RefreshWaves(modellNr) {
     // alte Ausgabe löschen
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-
-
     // Ausgabe
-    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, verticesIndexTriangle, gl.STATIC_DRAW);
-    ibo.numerOfEmements = verticesIndexTriangle.length;
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesx), gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(verticesIndexTrianglex), gl.STATIC_DRAW);
+    ibo.numerOfEmements = verticesIndexTrianglex.length;
 
     gl.drawElements(gl.TRIANGLES, ibo.numerOfEmements, gl.UNSIGNED_SHORT, 0);
 
     if (showLine) {
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, verticesIndexLine, gl.STATIC_DRAW);
-        ibo.numerOfEmements = verticesIndexLine.length;
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(verticesIndexLinex), gl.STATIC_DRAW);
+        ibo.numerOfEmements = verticesIndexLinex.length;
         gl.disableVertexAttribArray(aColor);
         gl.drawElements(gl.LINES, ibo.numerOfEmements, gl.UNSIGNED_SHORT, 0);
     }
-
-
-
 }
 
 /**

@@ -25,6 +25,10 @@ function cosinusFromDegree(degree, y_scale) {
  * basiert auf http://www.3d-meier.de/tut3/Seite17.html
  */
 function getFigure1VerticesPointsArray() {
+    verticesx = [];
+    verticesIndexLinex = [];
+    verticesIndexTrianglex = [];
+
     vertices = new Float32Array([]);
     verticesIndexLine = new Uint16Array([]);
     verticesIndexTriangle = new Uint16Array([]);
@@ -60,42 +64,42 @@ function getFigure1VerticesPointsArray() {
             let z = a * (-1.0 + h) * Math.sin(u) * Math.cos(0.5 * v) * Math.cos(0.5 * v);
 
             // define vertices
-            pushVertices(x * 100.0); // X Koordinate
-            pushVertices(y * 100.0); // Y Koordinate
-            pushVertices(z * 100.0); // Z Koordinate
+            verticesx.push(x * 100.0); // X Koordinate
+            verticesx.push(y * 100.0); // Y Koordinate
+            verticesx.push(z * 100.0); // Z Koordinate
 
-            pushVertices(R, G, B, 1.0); // Farbwert
+            verticesx.push(R, G, B, 1.0); // Farbwert
 
             R -= 1.0 / (stepU * stepV);
             G += 1.0 / (stepU * stepV);
 
             // Define index for one Line
             if (i > 0 && j >= 0) { // Tiefe
-                pushIndexLine(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
-                pushIndexLine(iVertex);
+                verticesIndexLinex.push(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
+                verticesIndexLinex.push(iVertex);
             }
             if (i > 0 && j >= 0) { // Kreise
-                pushIndexLine(iVertex - (stepV + 1));
-                pushIndexLine(iVertex);
+                verticesIndexLinex.push(iVertex - (stepV + 1));
+                verticesIndexLinex.push(iVertex);
             }
 
             // Define index for two triangles (CW und CCW).
             if (j > 0 && i > 0) {
-                pushIndexTriangle(iVertex);
-                pushIndexTriangle(iVertex - 1);
-                pushIndexTriangle(iVertex - (stepV + 1));
+                verticesIndexTrianglex.push(iVertex);
+                verticesIndexTrianglex.push(iVertex - 1);
+                verticesIndexTrianglex.push(iVertex - (stepV + 1));
                 // ...die Rückseite
-                pushIndexTriangle(iVertex - (stepV + 1));
-                pushIndexTriangle(iVertex - 1);
-                pushIndexTriangle(iVertex);
+                verticesIndexTrianglex.push(iVertex - (stepV + 1));
+                verticesIndexTrianglex.push(iVertex - 1);
+                verticesIndexTrianglex.push(iVertex);
                 //
-                pushIndexTriangle(iVertex - 1);
-                pushIndexTriangle(iVertex - (stepV + 1) - 1);
-                pushIndexTriangle(iVertex - (stepV + 1));
+                verticesIndexTrianglex.push(iVertex - 1);
+                verticesIndexTrianglex.push(iVertex - (stepV + 1) - 1);
+                verticesIndexTrianglex.push(iVertex - (stepV + 1));
                 // ...die Rückseite
-                pushIndexTriangle(iVertex - (stepV + 1));
-                pushIndexTriangle(iVertex - (stepV + 1) - 1);
-                pushIndexTriangle(iVertex - 1);
+                verticesIndexTrianglex.push(iVertex - (stepV + 1));
+                verticesIndexTrianglex.push(iVertex - (stepV + 1) - 1);
+                verticesIndexTrianglex.push(iVertex - 1);
             }
         }
     }
@@ -106,6 +110,10 @@ function getFigure1VerticesPointsArray() {
  * http://www.3d-meier.de/tut3/Seite22.html
  */
 function getFigure2VerticesPointsArray() {
+    verticesx = [];
+    verticesIndexLinex = [];
+    verticesIndexTrianglex = [];
+
     vertices = new Float32Array([]);
     verticesIndexLine = new Uint16Array([]);
     verticesIndexTriangle = new Uint16Array([]);
@@ -137,45 +145,49 @@ function getFigure2VerticesPointsArray() {
             let z = Math.pow(v, 2);
 
             // define vertices
-            pushVertices(x * 100); // X Koordinate
-            pushVertices(y * 100); // Y Koordinate
-            pushVertices(z * 100); // Z Koordinate
-            pushVertices(R, G, B, 1); // Farbwert
+            verticesx.push(x * 100); // X Koordinate
+            verticesx.push(y * 100); // Y Koordinate
+            verticesx.push(z * 100); // Z Koordinate
+            verticesx.push(R, G, B, 1); // Farbwert
 
             R -= 1.0 / (stepU * stepV);
             G += 1.0 / (stepU * stepV);
 
             // Define index for one Line
             if (i > 0 && j > 0) {
-                pushIndexLine(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
-                pushIndexLine(iVertex);
+                verticesIndexLinex.push(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
+                verticesIndexLinex.push(iVertex);
             }
             if (i > 0 && j > 0) {
-                pushIndexLine(iVertex - 1 - (stepV + 1));
-                pushIndexLine(iVertex);
+                verticesIndexLinex.push(iVertex - 1 - (stepV + 1));
+                verticesIndexLinex.push(iVertex);
             }
 
             // Define index for two triangles
             if (i > 0 && j >= 0) {
-                pushIndexTriangle(iVertex);
-                pushIndexTriangle(iVertex - 1);
-                pushIndexTriangle(iVertex - (stepV + 1));
+                verticesIndexTrianglex.push(iVertex);
+                verticesIndexTrianglex.push(iVertex - 1);
+                verticesIndexTrianglex.push(iVertex - (stepV + 1));
                 //
-                pushIndexTriangle(iVertex);
-                pushIndexTriangle(iVertex - 1 - (stepV + 1));
-                pushIndexTriangle(iVertex - (stepV + 1));
+                verticesIndexTrianglex.push(iVertex);
+                verticesIndexTrianglex.push(iVertex - 1 - (stepV + 1));
+                verticesIndexTrianglex.push(iVertex - (stepV + 1));
             }
         }
     }
 }
 
+var verticesx = [];
+var verticesIndexLinex = [];
+var verticesIndexTrianglex = [];
+
 /**
  * Baut die Vertices Array für die Linie und Dreiecke auf Basis der Vorgabewerte
  */
 function getFigure3VerticesPointsArray() {
-    vertices = new Float32Array([]);
-    verticesIndexLine = new Uint16Array([]);
-    verticesIndexTriangle = new Uint16Array([]);
+    verticesx = [];
+    verticesIndexLinex = [];
+    verticesIndexTrianglex = [];
 
     // Parameter Winkel/Grad
     let stepT = 16
@@ -190,31 +202,31 @@ function getFigure3VerticesPointsArray() {
             let iVertex = i * (stepR + 1) + j; // ==> Anzahl der Knoten
 
             // Punkte definieren
-            pushVertices(sinusFromDegree(grad, radius)); // X Koordinate
-            pushVertices(cosinusFromDegree(grad, radius)); // Y Koordinate
-            pushVertices(0); // Z Koordinate
+            verticesx.push(sinusFromDegree(grad, radius)); // X Koordinate
+            verticesx.push(cosinusFromDegree(grad, radius)); // Y Koordinate
+            verticesx.push(0); // Z Koordinate
 
             if (i % 2 === 0) {
-                pushVertices(1.0, 0.0, 0.0, 1); // Farbwert
+                verticesx.push(1.0, 0.0, 0.0, 1); // Farbwert
             } else if (i % 3 === 0) {
-                pushVertices(0.0, 1.0, 0.0, 1); // Farbwert
+                verticesx.push(0.0, 1.0, 0.0, 1); // Farbwert
             } else {
-                pushVertices(0.0, 0.0, 1.0, 1); // Farbwert
+                verticesx.push(0.0, 0.0, 1.0, 1); // Farbwert
             }
 
             // Define index for one Line
             if (i > 0 && j >= 0) { // Radien
-                pushIndexLine(iVertex - 1); // ==> Es reicht der 1 Eintrag des Knoten !!!
-                pushIndexLine(iVertex);
+                verticesIndexLinex.push(()=>{return iVertex - 1}); // ==> Es reicht der 1 Eintrag des Knoten !!!
+                verticesIndexLinex.push(iVertex);
             }
             if (i > 0 && j >= 0) { // Kreise
                 if (i % 2 === 0) {
-                    pushIndexLine(iVertex - (stepR + 1));
-                    pushIndexLine(iVertex);
+                    verticesIndexLinex.push(iVertex - (stepR + 1));
+                    verticesIndexLinex.push(iVertex);
                 } else {
                     if (j < stepR) {
-                        pushIndexLine(iVertex - (stepR + 1));
-                        pushIndexLine(iVertex);
+                        verticesIndexLinex.push(iVertex - (stepR + 1));
+                        verticesIndexLinex.push(iVertex);
                     }
                 }
             }
@@ -222,22 +234,22 @@ function getFigure3VerticesPointsArray() {
             // Define index for two triangles.
             if (j > 0 && i > 0) {
                 if (i % 2 === 0) {
-                    pushIndexTriangle(iVertex);
-                    pushIndexTriangle(iVertex - 1);
-                    pushIndexTriangle(iVertex - (stepR + 1));
+                    verticesIndexTrianglex.push(iVertex);
+                    verticesIndexTrianglex.push(iVertex - 1);
+                    verticesIndexTrianglex.push(iVertex - (stepR + 1));
                     //
-                    pushIndexTriangle(iVertex - 1);
-                    pushIndexTriangle(iVertex - (stepR + 1) - 1);
-                    pushIndexTriangle(iVertex - (stepR + 1));
+                    verticesIndexTrianglex.push(iVertex - 1);
+                    verticesIndexTrianglex.push(iVertex - (stepR + 1) - 1);
+                    verticesIndexTrianglex.push(iVertex - (stepR + 1));
                 } else {
                     if (j < stepR) {
-                        pushIndexTriangle(iVertex);
-                        pushIndexTriangle(iVertex - 1);
-                        pushIndexTriangle(iVertex - (stepR + 1));
+                        verticesIndexTrianglex.push(iVertex);
+                        verticesIndexTrianglex.push(iVertex - 1);
+                        verticesIndexTrianglex.push(iVertex - (stepR + 1));
                         //
-                        pushIndexTriangle(iVertex - 1);
-                        pushIndexTriangle(iVertex - (stepR + 1) - 1);
-                        pushIndexTriangle(iVertex - (stepR + 1));
+                        verticesIndexTrianglex.push(iVertex - 1);
+                        verticesIndexTrianglex.push(iVertex - (stepR + 1) - 1);
+                        verticesIndexTrianglex.push(iVertex - (stepR + 1));
                     }
                 }
             }
